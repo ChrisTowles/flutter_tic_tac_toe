@@ -2,7 +2,14 @@
 
 A new Flutter project.
 
-## ❯ Firebase
+## Table of Contents
+
+- [tic_tac_toe](#tictactoe)
+  - [Table of Contents](#table-of-contents)
+  - [Firebase](#firebase)
+  - [Getting Started](#getting-started)
+
+## Firebase
 
 ```bash
  npm install -g firebase-tools
