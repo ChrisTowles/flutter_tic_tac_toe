@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "664953779918",
+    "firebase_url": "https://tictactoe-towlesio.firebaseio.com",
+    "project_id": "tictactoe-towlesio",
+    "storage_bucket": "tictactoe-towlesio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664953779918:android:476d494fb1956f272f429f",
+        "android_client_info": {
+          "package_name": "io.towles.tictactoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664953779918-tn93slacme1ubkttn6flmq80khagfto1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKRG1xG10ZvNYzLYnR7xHsfnpzma3KBdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664953779918-tn93slacme1ubkttn6flmq80khagfto1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
