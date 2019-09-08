@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
-import 'package:tic_tac_toe/models/User.dart';
-import 'package:tic_tac_toe/models/score_detail.dart';
+import 'package:tic_tac_toe/models_old/User.dart';
+import 'package:tic_tac_toe/models_old/score_detail.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HighScoreBloc extends BlocBase{

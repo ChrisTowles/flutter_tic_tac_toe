@@ -1,5 +1,5 @@
-import 'package:tic_tac_toe/models/User.dart';
-import 'package:tic_tac_toe/models/game_piece.dart';
+import 'package:tic_tac_toe/models_old/User.dart';
+import 'package:tic_tac_toe/models_old/game_piece.dart';
 
 class Player{
 

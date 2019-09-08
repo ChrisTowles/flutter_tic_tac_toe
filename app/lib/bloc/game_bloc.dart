@@ -3,10 +3,10 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
-import 'package:tic_tac_toe/models/User.dart';
-import 'package:tic_tac_toe/models/game.dart';
-import 'package:tic_tac_toe/models/game_piece.dart';
-import 'package:tic_tac_toe/models/player.dart';
+import 'package:tic_tac_toe/models_old/User.dart';
+import 'package:tic_tac_toe/models_old/game.dart';
+import 'package:tic_tac_toe/models_old/game_piece.dart';
+import 'package:tic_tac_toe/models_old/player.dart';
 import 'package:tic_tac_toe/services/game_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tic_tac_toe/services/user_service.dart';

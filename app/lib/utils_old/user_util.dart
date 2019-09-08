@@ -1,4 +1,4 @@
-import 'package:tic_tac_toe/models/User.dart';
+import 'package:tic_tac_toe/models_old/User.dart';
 
 class UserUtil{
 

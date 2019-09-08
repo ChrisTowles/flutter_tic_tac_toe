@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:tic_tac_toe/models/User.dart';
-import 'package:tic_tac_toe/models/game.dart';
+import 'package:tic_tac_toe/models_old/User.dart';
+import 'package:tic_tac_toe/models_old/game.dart';
 import 'package:http/http.dart' as http;
 
 class GameService{
