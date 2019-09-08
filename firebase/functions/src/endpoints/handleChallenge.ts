@@ -60,7 +60,7 @@ export const handleChallenge = async(request:  Request, response: Response) => {
         }
         console.log(notificationMessage);
 
-        changeGamePlayersState(senderId, receiverId, 'playing');
+        await changeGamePlayersState(senderId, receiverId, 'playing');
 
         let message = {
             data: {
