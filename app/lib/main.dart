@@ -1,4 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/util/state_widget.dart';
+import 'package:tic_tac_toe/ui/theme.dart';
+import 'package:tic_tac_toe/ui/screens/home.dart';
+import 'package:tic_tac_toe/ui/screens/sign_in.dart';
+import 'package:tic_tac_toe/ui/screens/sign_up.dart';
+import 'package:tic_tac_toe/ui/screens/forgot_password.dart';
+
+class MyApp extends StatelessWidget {
+  MyApp() {
+    //Navigation.initPaths();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'MyApp Title',
+      theme: buildTheme(),
+      //onGenerateRoute: Navigation.router.generator,
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/signin': (context) => SignInScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/forgot-password': (context) => ForgotPasswordScreen(),
+      },
+    );
+  }
+}
+
+void main() {
+  StateWidget stateWidget = new StateWidget(
+    child: new MyApp(),
+  );
+  runApp(stateWidget);
+}
+
+/*
+import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/bloc/user_bloc.dart';
@@ -42,3 +79,4 @@ class MyApp extends StatelessWidget {
       ;
   }
 }
+*/
