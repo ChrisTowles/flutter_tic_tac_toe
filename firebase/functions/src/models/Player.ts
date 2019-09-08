@@ -6,5 +6,4 @@ export interface Player {
     },
     gamePiece: string,
     score: number
-
 }

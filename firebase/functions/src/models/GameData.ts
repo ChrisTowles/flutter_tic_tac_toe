@@ -9,13 +9,3 @@ export interface GameData
     currentPlayer: string,
     pieces: Board
 }
-
-export interface GameDataUpdate
-{
-    winner?: string;
-    player1?: Player,
-    player2?: Player,
-    currentPlayer?: string,
-    pieces?: Board
-
-}
