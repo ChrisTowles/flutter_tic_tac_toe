@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class GameService{
 
-  String apiUrl = 'https://us-central1-tic-tac-toe-a69ee.cloudfunctions.net/';
+  String apiUrl = 'https://us-central1-tictactoe-towlesio.cloudfunctions.net/webApi/api/v1/';
 
   Future<bool> handleChallenge(User sender, User receiver, ChallengeHandleType handleType) async{
 
