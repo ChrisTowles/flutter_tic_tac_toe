@@ -1,6 +1,6 @@
 # tic_tac_toe
 
-A new Flutter project.
+This Flutter app started from the base of A new Flutter project.
 
 ## Getting Started
 
