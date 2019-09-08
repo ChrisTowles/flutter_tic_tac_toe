@@ -1,7 +1,10 @@
 
 export interface Player {
     user: {
-        id: string
-    }
+        id: string,
+        name: string
+    },
+    gamePiece: string,
+    score: number
 
 }

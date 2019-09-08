@@ -4,6 +4,11 @@ import * as express from 'express';
 import * as bodyParser from "body-parser";
 
 import {replayGame} from './endpoints/replayGame';
+import {cancelGame} from './endpoints/cancelGame';
+import {handleChallenge} from './endpoints/handleChallenge';
+import {playPiece} from './endpoints/playPiece';
+
+
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -20,40 +25,30 @@ main.use(bodyParser.json());
 main.use(bodyParser.urlencoded({ extended: false }));
 
 
-
-
 app.get('/hello', (req: express.Request, res: express.Response) : void => {
     
     console.log(req)
-    res.json( { msg: "Hello from Firebase!", "body": req.query});
+    res.status(200).json( { msg: "Hello from Firebase!", "body": req.query});
 })
 
 app.get('/replayGame', replayGame) 
+app.get('/cancelGame', cancelGame) 
+app.get('/handleChallenge', handleChallenge) 
+app.get('/playPiece', playPiece) 
 
 
+exports.onUserStatusChanged = functions.database.ref('/status/{userId}').onUpdate(
+  (change, context) => {
+    // Get the data written to Realtime Database
+    const eventStatus = change.after.val();
+    const usersRef = admin.firestore().collection('/users');
 
-export const addNumbers = functions.https.onRequest((request, response) => {
-    response.send(Number(request.query.a) + Number(request.query.b));
+    return usersRef
+          .doc(context.params.userId)
+          .set({
+            currentState: eventStatus.state
+          }, { merge: true });
   });
-
-/*
- export const helloWorld = functions.https.onRequest((request, response) => {
-     request.rawBody
-  response.send("Hello from Firebase!");
- });
-
-*/
-// View a contact
-/*app.get('/test/:contactId', (req: express.Request, res: express.Response) => {
-    
-
-     //   res.status(200)
-     //   res.send({test:  req.params.contactId})
-     return;
-        
-})
-
-*/
 
 
 // webApi is your functions name, and you will pass main as 
