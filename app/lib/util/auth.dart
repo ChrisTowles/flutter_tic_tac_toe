@@ -58,7 +58,9 @@ class Auth {
   static Future<String> signIn(String email, String password) async {
     AuthResult authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
 
-    return authResult.user.uid;
+    FirebaseUser user = authResult.user;
+
+    return user.uid;
   }
 
   static Future<User> getUserFirestore(String userId) async {
@@ -76,11 +78,13 @@ class Auth {
 
   static Future<Settings> getSettingsFirestore(String userid) async {
     if (userid != null) {
-      return Firestore.instance
+      var documentSnapshot = await Firestore.instance
           .collection('settings')
           .document(userid)
-          .get()
-          .then((documentSnapshot) => Settings.fromDocument(documentSnapshot));
+          .get();
+
+        return Settings.fromDocument(userid, documentSnapshot);
+
     } else {
       print('no firestore settings available');
       return null;

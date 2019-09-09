@@ -29,7 +29,11 @@ class Settings {
         "settingsId": settingsId,
       };
 
-  factory Settings.fromDocument(DocumentSnapshot doc) {
-    return Settings.fromJson(doc.data);
+  factory Settings.fromDocument(String userid, DocumentSnapshot doc) {
+    if(doc.exists) {
+      return Settings.fromJson(doc.data);
+    } else {
+        throw Exception('No Settings Document exists for: $userid');
+    }
   }
 }
