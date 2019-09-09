@@ -29,18 +29,37 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         _loadingVisible = false;
       }
+
+
+      final avatarUrl = appState?.user?.avatarUrl;
+
+      Widget image;
+
+      if( avatarUrl != null )
+      {
+        image = Image.network(
+          avatarUrl,
+          fit: BoxFit.cover,
+          width: 120.0,
+          height: 120.0,
+        );
+      } else {
+        image =Image.asset(
+        'assets/images/default.png',
+        fit: BoxFit.cover,
+        width: 120.0,
+        height: 120.0,
+        );
+      }
+
+
       final logo = Hero(
         tag: 'hero',
         child: CircleAvatar(
             backgroundColor: Colors.transparent,
             radius: 60.0,
             child: ClipOval(
-              child: Image.asset(
-                'assets/images/default.png',
-                fit: BoxFit.cover,
-                width: 120.0,
-                height: 120.0,
-              ),
+              child: image,
             )),
       );
 

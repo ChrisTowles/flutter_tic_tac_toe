@@ -15,19 +15,15 @@ String userToJson(User data) {
   return json.encode(dyn);
 }
 
-
-
-getStateFromString(String userStateString){
-
-  UserState state =UserState.values.firstWhere((userState) => userState.toString().split('.')[1] == userStateString);
+getStateFromString(String userStateString) {
+  UserState state = UserState.values.firstWhere(
+      (userState) => userState.toString().split('.')[1] == userStateString);
   return state;
 }
 
-getStringFromState(UserState state){
-
+getStringFromState(UserState state) {
   return state.toString().split('.')[1];
 }
-
 
 enum UserState { available, playing, away, offline }
 
@@ -40,36 +36,37 @@ class User {
   final UserState currentState;
   final String fcmToken;
 
-  User({
-    this.userId,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.avatarUrl,
-    this.currentState,
-    this.fcmToken
-  });
+  User(
+      {this.userId,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.avatarUrl,
+      this.currentState,
+      this.fcmToken});
 
+  factory User.fromJson(Map<String, dynamic> json) {
+    final user = new User(
+      userId: json["userId"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      email: json["email"],
+      avatarUrl: json.containsKey("avatarUrl") ? json["avatarUrl"] : "",
+      currentState: json.containsKey("currentState")
+          ? getStateFromString(json["currentState"])
+          : UserState.available,
+      fcmToken: json.containsKey("fcmToken") ? json["fcmToken"] : "",
+    );
 
-
-
-  factory User.fromJson(Map<String, dynamic> json) => new User(
-        userId: json["userId"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        email: json["email"],
-        avatarUrl: json.containsKey("avatarUrl") ? json["avatarUrl"]: "",
-        currentState: json.containsKey("currentState") ? getStateFromString(json["currentState"]) : UserState.available,
-        fcmToken: json.containsKey("fcmToken") ? json["fcmToken"]: "",
-  );
-
+    return user;
+  }
 
   Map<String, dynamic> toJson() => {
         "userId": userId,
         "firstName": firstName,
         "lastName": lastName,
         "avatarUrl": avatarUrl,
-        "currentState":  getStringFromState(currentState),
+        "currentState": getStringFromState(currentState),
         "fcmToken": fcmToken,
       };
 
