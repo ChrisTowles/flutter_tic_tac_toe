@@ -7,8 +7,8 @@ service cloud.firestore {
     }
     
     match /settings/{userId} {
-      allow read: request.auth.uid == userId
-      allow write: request.auth.uid == userId
+      allow read: if request.auth.uid == userId
+      allow write: if request.auth.uid == userId
     }
     
     //only cloud function will be used to write to games

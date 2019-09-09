@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe/util/state_widget.dart';
+import 'package:tic_tac_toe/repositories/user_repository.dart';
+import 'package:tic_tac_toe/ui/screens/home_screen.dart';
+import 'package:tic_tac_toe/ui/screens/login/login_screen.dart';
+import 'package:tic_tac_toe/ui/screens/splash_screen.dart';
 import 'package:tic_tac_toe/ui/theme.dart';
-import 'package:tic_tac_toe/ui/screens/home.dart';
-import 'package:tic_tac_toe/ui/screens/sign_in.dart';
-import 'package:tic_tac_toe/ui/screens/sign_up.dart';
-import 'package:tic_tac_toe/ui/screens/forgot_password.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/authentication_bloc/bloc.dart';
+import 'bloc/simple_bloc_delegate.dart';
+/*
 class MyApp extends StatelessWidget {
   MyApp() {
     //Navigation.initPaths();
@@ -26,12 +30,52 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/
+
+class App extends StatelessWidget {
+  final UserRepository _userRepository;
+
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: buildTheme(),
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          if (state is Uninitialized) {
+            return SplashScreen();
+          }
+          else if (state is Authenticated) {
+            return HomeScreen(name: state.displayName);
+          }
+          if (state is Unauthenticated) {
+            return LoginScreen(userRepository: _userRepository);
+          }
+          else {
+            return Container();
+          }
+
+        },
+      ),
+    );
+  }
+}
 
 void main() {
-  StateWidget stateWidget = new StateWidget(
-    child: new MyApp(),
+
+  final UserRepository userRepository = UserRepository();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
+
+  runApp( BlocProvider(
+    builder: (context) => AuthenticationBloc(userRepository: userRepository)
+      ..dispatch(AppStarted()),
+    child: App(userRepository: userRepository),
+  ),
   );
-  runApp(stateWidget);
 }
 
 /*
