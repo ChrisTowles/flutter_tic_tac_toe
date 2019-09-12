@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
-import 'package:tic_tac_toe/ui/screens/register/register_form.dart';
+import 'package:tic_tac_toe/screens/reset_password/reset_password_form.dart';
 
 import 'bloc/bloc.dart';
 
-class RegisterScreen extends StatelessWidget {
+class ResetPasswordScreen extends StatelessWidget {
   final UserRepository _userRepository;
 
-  RegisterScreen({Key key, @required UserRepository userRepository})
+  ResetPasswordScreen({Key key, @required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository,
         super(key: key);
@@ -16,11 +16,11 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
+      appBar: AppBar(title: Text('Reset Password')),
       body: Center(
-        child: BlocProvider<RegisterBloc>(
-          builder: (context) => RegisterBloc(userRepository: _userRepository),
-          child: RegisterForm(),
+        child: BlocProvider<ResetPasswordBloc>(
+          builder: (context) => ResetPasswordBloc(userRepository: _userRepository),
+          child: ResetPasswordForm(),
         ),
       ),
     );

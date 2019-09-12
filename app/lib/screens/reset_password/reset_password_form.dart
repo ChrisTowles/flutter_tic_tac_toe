@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tic_tac_toe/bloc/authentication_bloc/bloc.dart';
-import 'package:tic_tac_toe/ui/screens/register/register_button.dart';
-
 
 import 'bloc/bloc.dart';
+import 'reset_password_button.dart';
 
-class RegisterForm extends StatefulWidget {
-  State<RegisterForm> createState() => _RegisterFormState();
+class ResetPasswordForm extends StatefulWidget {
+  State<ResetPasswordForm> createState() => _RegisterFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _RegisterFormState extends State<ResetPasswordForm> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
-  RegisterBloc _registerBloc;
+
+  ResetPasswordBloc _resetPasswordBloc;
 
   bool get isPopulated =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+      _emailController.text.isNotEmpty;
 
-  bool isRegisterButtonEnabled(RegisterState state) {
+  bool isRegisterButtonEnabled(ResetPasswordState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
   @override
   void initState() {
     super.initState();
-    _registerBloc = BlocProvider.of<RegisterBloc>(context);
+    _resetPasswordBloc = BlocProvider.of<ResetPasswordBloc>(context);
     _emailController.addListener(_onEmailChanged);
-    _passwordController.addListener(_onPasswordChanged);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(
+    return BlocListener<ResetPasswordBloc, ResetPasswordState>(
       listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)
@@ -43,7 +40,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registering...'),
+                    Text('Sending request...'),
                     CircularProgressIndicator(),
                   ],
                 ),
@@ -51,8 +48,19 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
-          Navigator.of(context).pop();
+
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Success! Check your Email!'),
+                  ],
+                ),
+              ),
+            );
         }
         if (state.isFailure) {
           Scaffold.of(context)
@@ -62,7 +70,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registration Failure'),
+                    Text('Password Reset Failure'),
                     Icon(Icons.error),
                   ],
                 ),
@@ -71,7 +79,7 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
       },
-      child: BlocBuilder<RegisterBloc, RegisterState>(
+      child: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(20),
@@ -90,23 +98,15 @@ class _RegisterFormState extends State<RegisterForm> {
                       return !state.isEmailValid ? 'Invalid Email' : null;
                     },
                   ),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.lock),
-                      labelText: 'Password',
+
+                  Padding(
+
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: ResetPasswordButton(
+                      onPressed: isRegisterButtonEnabled(state)
+                          ? _onFormSubmitted
+                          : null,
                     ),
-                    obscureText: true,
-                    autocorrect: false,
-                    autovalidate: true,
-                    validator: (_) {
-                      return !state.isPasswordValid ? 'Invalid Password' : null;
-                    },
-                  ),
-                  RegisterButton(
-                    onPressed: isRegisterButtonEnabled(state)
-                        ? _onFormSubmitted
-                        : null,
                   ),
                 ],
               ),
@@ -120,27 +120,19 @@ class _RegisterFormState extends State<RegisterForm> {
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
   void _onEmailChanged() {
-    _registerBloc.dispatch(
+    _resetPasswordBloc.dispatch(
       EmailChanged(email: _emailController.text),
     );
   }
 
-  void _onPasswordChanged() {
-    _registerBloc.dispatch(
-      PasswordChanged(password: _passwordController.text),
-    );
-  }
-
   void _onFormSubmitted() {
-    _registerBloc.dispatch(
+    _resetPasswordBloc.dispatch(
       Submitted(
         email: _emailController.text,
-        password: _passwordController.text,
       ),
     );
   }

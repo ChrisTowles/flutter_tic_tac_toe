@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
-import 'package:tic_tac_toe/ui/screens/home_screen.dart';
-import 'package:tic_tac_toe/ui/screens/login/login_screen.dart';
-import 'package:tic_tac_toe/ui/screens/splash_screen.dart';
+import 'package:tic_tac_toe/screens/home/home_screen.dart';
+import 'package:tic_tac_toe/screens/login/login_screen.dart';
+import 'package:tic_tac_toe/screens/splash/splash_screen.dart';
 import 'package:tic_tac_toe/ui/theme.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

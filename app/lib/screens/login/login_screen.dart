@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
-import 'package:tic_tac_toe/ui/screens/login/bloc/bloc.dart';
+import 'package:tic_tac_toe/screens/login/bloc/bloc.dart';
 
 import 'login_form.dart';
 

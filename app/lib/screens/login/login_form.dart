@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/bloc/authentication_bloc/bloc.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
-import 'package:tic_tac_toe/ui/screens/login/bloc/bloc.dart';
+import 'package:tic_tac_toe/screens/login/bloc/bloc.dart';
 
 import 'create_account_button.dart';
+import 'forgot_password_button.dart';
 import 'google_login_button.dart';
 import 'login_button.dart';
 
@@ -87,7 +88,7 @@ class _LoginFormState extends State<LoginForm> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Image.asset('assets/flutter_logo.png', height: 200),
+                    child: Image.asset('assets/images/default.png', height: 200),
                   ),
                   TextFormField(
                     controller: _emailController,
@@ -126,6 +127,7 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         GoogleLoginButton(),
                         CreateAccountButton(userRepository: _userRepository),
+                        ForgotPasswordButton(userRepository: _userRepository),
                       ],
                     ),
                   ),

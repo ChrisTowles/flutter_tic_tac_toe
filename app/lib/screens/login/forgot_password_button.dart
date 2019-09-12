@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
-import 'package:tic_tac_toe/ui/screens/register/register_screen.dart';
+import 'package:tic_tac_toe/screens/register/register_screen.dart';
+import 'package:tic_tac_toe/screens/reset_password/reset_password_screen.dart';
 
-class CreateAccountButton extends StatelessWidget {
+class ForgotPasswordButton extends StatelessWidget {
   final UserRepository _userRepository;
 
-  CreateAccountButton({Key key, @required UserRepository userRepository})
+  ForgotPasswordButton({Key key, @required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository,
         super(key: key);
@@ -14,12 +15,12 @@ class CreateAccountButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       child: Text(
-        'Create an Account',
+        'Forgot Password',
       ),
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) {
-            return RegisterScreen(userRepository: _userRepository);
+            return ResetPasswordScreen(userRepository: _userRepository);
           }),
         );
       },
