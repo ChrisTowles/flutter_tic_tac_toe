@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         title: Text('Home'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.exit_to_app),
+            icon: Icon(Icons.exit_to_app), // TODO: Better Logout System.
             onPressed: () {
               BlocProvider.of<AuthenticationBloc>(context).dispatch(
                 LoggedOut(),

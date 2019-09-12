@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:tic_tac_toe/models_old/User.dart';
 import 'package:tic_tac_toe/models_old/app_error.dart';
-import 'package:tic_tac_toe/utils_old/user_util.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_database/firebase_database.dart';

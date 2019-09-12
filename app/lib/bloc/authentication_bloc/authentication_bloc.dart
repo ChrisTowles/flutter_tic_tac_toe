@@ -36,6 +36,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       if (isSignedIn) {
         final name = await _userRepository.getUser();
         yield Authenticated(name);
+
+
+
       } else {
         yield Unauthenticated();
       }
