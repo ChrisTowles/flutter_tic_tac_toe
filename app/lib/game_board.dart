@@ -27,7 +27,7 @@ class _GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _gameBloc = BlocProvider.of<GameBloc>(context);
+    _gameBloc = TTTBlocProvider.of<GameBloc>(context);
 
   }
 

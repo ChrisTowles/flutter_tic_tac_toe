@@ -38,8 +38,8 @@ class _MenuPageState extends State<MenuPage>
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-     _userBloc = BlocProvider.of<UserBloc>(context);
-    _gameBloc = BlocProvider.of<GameBloc>(context);
+     _userBloc = TTTBlocProvider.of<UserBloc>(context);
+    _gameBloc = TTTBlocProvider.of<GameBloc>(context);
   }
 
   @override

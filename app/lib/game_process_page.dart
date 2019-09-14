@@ -17,7 +17,7 @@ class _GameProcessPageState extends State<GameProcessPage> {
    @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _gameBloc = BlocProvider.of<GameBloc>(context);
+    _gameBloc = TTTBlocProvider.of<GameBloc>(context);
 
   }
 
