@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tic_tac_toe/models/User.dart';
 
 
-class AuthBloc extends BlocBase{
+class AuthBloc_DELETE extends BlocBase{
 
   UserService userService;
   BlocCompleter completer;
@@ -27,7 +27,7 @@ class AuthBloc extends BlocBase{
 
     Stream<LoadStatus> get loadStatus => _loadStatusSubject.stream;
 
-    AuthBloc(this.userService, this.completer){
+  AuthBloc_DELETE(this.userService, this.completer){
 
         _socialLoginSubject.stream.listen(_handleSocialLogin);
 
@@ -102,3 +102,4 @@ try{
 
 
 }
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tic_tac_toe/repositories/firestore_repository.dart';
 import 'package:tic_tac_toe/screens/menu/menu_page.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/screens/home/home_screen.dart';
@@ -18,12 +19,9 @@ import 'bloc/simple_bloc_delegate.dart';
 import 'bloc/user_bloc.dart';
 
 class App extends StatelessWidget {
-  final UserRepository _userRepository;
 
-  App({Key key, @required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository,
-        super(key: key);
+  App({Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +39,11 @@ class App extends StatelessWidget {
             return SplashScreen();
           }
           else if (state is Authenticated) {
-            //return HomeScreen(name: state.displayName);
-            return MenuPage();
+            return HomeScreen(name: state.displayName);
+            // return MenuPage();
           }
           if (state is Unauthenticated) {
-            return LoginScreen(userRepository: _userRepository);
+            return LoginScreen();
           }
           else {
             return Container();
@@ -66,6 +64,7 @@ void main() {
     MultiProvider(
         providers: [
           Provider<UserRepository>.value(value: userRepository),
+          Provider<FirestoreRepository>.value(value: FirestoreRepository()),
         ],
         child: MultiBlocProvider(
             providers: [
@@ -81,7 +80,7 @@ void main() {
                 child: TTTBlocProvider<GameBloc>(
                   bloc: GameBloc(
                       gameService: GameService(), userService: userService),
-                  child: App(userRepository: userRepository),
+                  child: App(),
                 )
             )
         )

@@ -122,9 +122,8 @@ class _UsersBoardState extends State<UsersBoard> {
                           Navigator.pop(context);
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => GameProcessPage()));
                         }else{
-                            var userRepo = Provider.of<UserRepository>(context, listen: false);
                              Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (index) => LoginScreen(userRepository: userRepo)));
+                                    builder: (index) => LoginScreen()));
                         }
                     },
                   ),
