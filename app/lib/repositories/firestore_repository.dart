@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tic_tac_toe/models_old/User.dart';
+import 'package:tic_tac_toe/models/User.dart';
 
 class FirestoreRepository {
   final Firestore _firestore;

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
-import 'package:tic_tac_toe/models_old/User.dart';
+import 'package:tic_tac_toe/models/User.dart';
 import 'package:tic_tac_toe/services/user_service.dart';
 import 'package:tic_tac_toe/util/user_util.dart';
 import 'package:rxdart/rxdart.dart';

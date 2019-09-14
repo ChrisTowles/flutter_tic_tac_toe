@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/bloc/high_score_bloc.dart';
-import 'package:tic_tac_toe/models_old/score_detail.dart';
+import 'package:tic_tac_toe/models/score_detail.dart';
 
 class HighScoreBoard extends StatefulWidget {
   HighScoreBoard({Key key}) : super(key: key);

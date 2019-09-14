@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
-import 'package:tic_tac_toe/menu_page.dart';
-import 'package:tic_tac_toe/models_old/game_piece.dart';
-import 'package:tic_tac_toe/models_old/player.dart';
+import 'package:tic_tac_toe/screens/menu/menu_page.dart';
+import 'package:tic_tac_toe/models/game_piece.dart';
+import 'package:tic_tac_toe/models/player.dart';
 
 class GameBoard extends StatefulWidget {
   GameBoard({Key key}) : super(key: key);
