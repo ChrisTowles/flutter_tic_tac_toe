@@ -1,15 +1,18 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/models/User.dart';
-import 'package:tic_tac_toe/services/user_service.dart';
+import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/util/user_util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserBloc extends BlocBase{
 
-  final UserService userService;
+  final UserRepository _userRepository;
+
+
 
   final _currentUserSubject = BehaviorSubject<User>();
   final _usersSubject = BehaviorSubject<List<User>>();
@@ -26,10 +29,15 @@ class UserBloc extends BlocBase{
   Function(String) get changeFcmToken => (token) => _changeFcmTokenSubject.sink.add(token);
   Function() get logoutUser => () => _logoutUser.sink.add(null);
 
-  UserBloc({this.userService}){
+
+    UserBloc({
+    @required UserRepository userRepository,
+    })  : assert(userRepository != null),
+    _userRepository = userRepository {
+
 
     //Get the user on app start up
-    userService.getCurrentUser().then((user){
+  _userRepository.getCurrentUser().then((user){
         if(user != null){
             _currentUserSubject.sink.add(user);
             //TODO: remove comment from the statement below to enable online presence check.
@@ -47,7 +55,7 @@ class UserBloc extends BlocBase{
 
   _handleGetUsers(_) async{
           
-         User currentUser = await userService.getCurrentUser();
+         User currentUser = await _userRepository.getCurrentUser();
 
           Firestore.instance.collection('users').snapshots().listen((data){
 
@@ -70,19 +78,19 @@ class UserBloc extends BlocBase{
 
   _handleChangeFcmToken(token) async{
         
-          User currentUser = await userService.getCurrentUser();
+          User currentUser = await _userRepository.getCurrentUser();
 
           if(currentUser != null){
             currentUser = currentUser.copyWith(fcmToken: token);
             _currentUserSubject.sink.add(currentUser);
-            userService.addUserTokenToStore(currentUser.id, token);
+            _userRepository.addUserTokenToStore(currentUser.id, token);
           }
 
-          userService.saveUserFcmTokenToPreference(token);
+          _userRepository.saveUserFcmTokenToPreference(token);
    }
 
   _handleLogout(_){
-      userService.logoutUser();
+      _userRepository.signOut();
       _currentUserSubject.sink.add(null);
 
   }

@@ -2,19 +2,21 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 
+import 'package:meta/meta.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/models/User.dart';
 import 'package:tic_tac_toe/models/game.dart';
 import 'package:tic_tac_toe/models/game_piece.dart';
 import 'package:tic_tac_toe/models/player.dart';
+import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/services/game_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tic_tac_toe/services/user_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GameBloc extends BlocBase {
-  final GameService gameService;
-  final UserService userService;
+  final GameService _gameService;
+  final UserRepository _userRepository;
+
   StreamSubscription<DocumentSnapshot> _serverGameSub;
 
   List<GamePiece> _currentBoardC = [];
@@ -68,8 +70,11 @@ class GameBloc extends BlocBase {
   Stream<bool> get multiNetworkStarted => _multiNetworkStarted.stream;
   Stream<bool> get gameOver => _gameOverSubject.stream;
 
-  GameBloc({this.gameService, this.userService}) {
-    _emptyGameBoard();
+  GameBloc({
+    @required  GameService gameService,
+    @required UserRepository userRepository,
+  })  : assert(userRepository != null), _userRepository = userRepository,
+        assert(gameService != null), _gameService = gameService {
 
     _handleChallengeSubject.stream.listen(_handleChallenge);
 
@@ -98,11 +103,11 @@ class GameBloc extends BlocBase {
   }
 
   _handleChallenge(challengeDetails) async {
-    User sender = await userService.getCurrentUser();
+    User sender = await _userRepository.getCurrentUser();
     User receiver = challengeDetails['receiver'];
     ChallengeHandleType handleType = challengeDetails['challengeHandleType'];
 
-    gameService.handleChallenge(sender, receiver, handleType);
+    _gameService.handleChallenge(sender, receiver, handleType);
   }
 
   _handleStartSingleDeviceGame(gameType) async {
@@ -149,7 +154,7 @@ class GameBloc extends BlocBase {
     Player currentPlayer = details['currentPlayer'];
     bool isAuto = details['isAuto'];
 
-    User currentUser = await userService.getCurrentUser();
+    User currentUser = await _userRepository.getCurrentUser();
 
     if (_currentBoardC[position].piece.isEmpty && !_gameOver) {
       if (_gameType == GameType.multi_network) {
@@ -163,7 +168,7 @@ class GameBloc extends BlocBase {
 
           String networkGameId = player1.user.id + '_' + player2.user.id;
 
-          gameService
+          _gameService
               .playPiece(networkGameId, currentUser.id, position)
               .catchError((err) {
             _changePlayerTurn(false);
@@ -219,9 +224,9 @@ class GameBloc extends BlocBase {
       List<Player> players = await _getPlayers();
 
       String gameId = players[0].user.id + '_' + players[1].user.id;
-      User currentUser = await userService.getCurrentUser();
+      User currentUser = await _userRepository.getCurrentUser();
       try {
-        gameService.cancelGame(gameId, currentUser.id,  players[0].user.fcmToken, players[1].user.fcmToken);
+        _gameService.cancelGame(gameId, currentUser.id,  players[0].user.fcmToken, players[1].user.fcmToken);
         _serverGameSub.cancel();
       } catch (err) {
         print(err);
@@ -235,10 +240,10 @@ class GameBloc extends BlocBase {
       List<Player> players = await _getPlayers();
 
       String gameId = players[0].user.id + '_' + players[1].user.id;
-      User currentUser = await userService.getCurrentUser();
+      User currentUser = await _userRepository.getCurrentUser();
 
       try {
-        await gameService.replayGame(gameId, currentUser.id, players[0].user.fcmToken, players[1].user.fcmToken);
+        await _gameService.replayGame(gameId, currentUser.id, players[0].user.fcmToken, players[1].user.fcmToken);
       } catch (err) {
         print(err);
       }

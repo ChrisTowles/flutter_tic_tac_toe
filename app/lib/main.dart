@@ -7,7 +7,6 @@ import 'package:tic_tac_toe/screens/home/home_screen.dart';
 import 'package:tic_tac_toe/screens/login/login_screen.dart';
 import 'package:tic_tac_toe/screens/splash/splash_screen.dart';
 import 'package:tic_tac_toe/services/game_service.dart';
-import 'package:tic_tac_toe/services/user_service.dart';
 import 'package:tic_tac_toe/ui/theme.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,9 +18,7 @@ import 'bloc/simple_bloc_delegate.dart';
 import 'bloc/user_bloc.dart';
 
 class App extends StatelessWidget {
-
-  App({Key key})
-      : super(key: key);
+  App({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +34,13 @@ class App extends StatelessWidget {
         builder: (context, state) {
           if (state is Uninitialized) {
             return SplashScreen();
-          }
-          else if (state is Authenticated) {
-            return HomeScreen(name: state.displayName);
-            // return MenuPage();
+          } else if (state is Authenticated) {
+            // return HomeScreen(name: state.displayName);
+            return MenuPage();
           }
           if (state is Unauthenticated) {
             return LoginScreen();
-          }
-          else {
+          } else {
             return Container();
           }
         },
@@ -58,8 +53,6 @@ void main() {
   final UserRepository userRepository = UserRepository();
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
-  UserService userService = UserService();
-
   runApp(
     MultiProvider(
         providers: [
@@ -70,22 +63,16 @@ void main() {
             providers: [
               BlocProvider<AuthenticationBloc>(
                   builder: (context) =>
-                  AuthenticationBloc(userRepository: userRepository)
-                    ..dispatch(AppStarted())
-              ),
+                      AuthenticationBloc(userRepository: userRepository)
+                        ..dispatch(AppStarted())),
             ],
-            child:
-            TTTBlocProvider<UserBloc>(
-                bloc: UserBloc(userService: userService),
+            child: TTTBlocProvider<UserBloc>(
+                bloc: UserBloc(userRepository: userRepository),
                 child: TTTBlocProvider<GameBloc>(
                   bloc: GameBloc(
-                      gameService: GameService(), userService: userService),
+                      gameService: GameService(),
+                      userRepository: userRepository),
                   child: App(),
-                )
-            )
-        )
-    ),
+                )))),
   );
-
-
 }
