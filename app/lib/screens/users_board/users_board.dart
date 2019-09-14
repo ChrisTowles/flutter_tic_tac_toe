@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe/auth_page.dart';
+import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
 import 'package:tic_tac_toe/bloc/user_bloc.dart';
-import 'package:tic_tac_toe/game_process_page.dart';
-import 'package:tic_tac_toe/models_old/User.dart';
-import 'package:tic_tac_toe/models_old/game.dart';
-import 'package:tic_tac_toe/utils_old/user_util.dart';
+import 'package:tic_tac_toe/screens/game_invite/game_process_page.dart';
+import 'package:tic_tac_toe/models/User.dart';
+import 'package:tic_tac_toe/models/game.dart';
+import 'package:tic_tac_toe/repositories/user_repository.dart';
+import 'package:tic_tac_toe/screens/login/login_screen.dart';
+import 'package:tic_tac_toe/util/user_util.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UsersBoard extends StatefulWidget {
@@ -24,8 +26,8 @@ class _UsersBoardState extends State<UsersBoard> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _userBloc = BlocProvider.of<UserBloc>(context);
-    _gameBloc = BlocProvider.of<GameBloc>(context);
+    _userBloc = TTTBlocProvider.of<UserBloc>(context);
+    _gameBloc = TTTBlocProvider.of<GameBloc>(context);
 
   }
   
@@ -120,8 +122,9 @@ class _UsersBoardState extends State<UsersBoard> {
                           Navigator.pop(context);
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => GameProcessPage()));
                         }else{
+                            var userRepo = Provider.of<UserRepository>(context, listen: false);
                              Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (index) => AuthPage(false)));
+                                    builder: (index) => LoginScreen(userRepository: userRepo)));
                         }
                     },
                   ),

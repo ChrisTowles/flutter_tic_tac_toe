@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
-import 'package:tic_tac_toe/game_board.dart';
+import 'package:tic_tac_toe/screens/game_board/game_board.dart';
 
 class GameProcessPage extends StatefulWidget {
   GameProcessPage({Key key}) : super(key: key);
@@ -17,7 +17,7 @@ class _GameProcessPageState extends State<GameProcessPage> {
    @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _gameBloc = BlocProvider.of<GameBloc>(context);
+    _gameBloc = TTTBlocProvider.of<GameBloc>(context);
 
   }
 

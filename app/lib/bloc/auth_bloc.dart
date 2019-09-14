@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
-import 'package:tic_tac_toe/models_old/auth.dart';
-import 'package:tic_tac_toe/models_old/bloc_completer.dart';
-import 'package:tic_tac_toe/models_old/load_status.dart';
+import 'package:tic_tac_toe/models//auth.dart';
+import 'package:tic_tac_toe/models/bloc_completer.dart';
+import 'package:tic_tac_toe/models/load_status.dart';
 import 'package:tic_tac_toe/services/user_service.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tic_tac_toe/models_old/User.dart';
+import 'package:tic_tac_toe/models/User.dart';
 
 
 class AuthBloc extends BlocBase{

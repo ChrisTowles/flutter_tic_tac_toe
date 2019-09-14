@@ -1,16 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe/auth_page.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
 import 'package:tic_tac_toe/bloc/user_bloc.dart';
-import 'package:tic_tac_toe/game_board.dart';
-import 'package:tic_tac_toe/game_process_page.dart';
-import 'package:tic_tac_toe/high_score_board.dart';
-import 'package:tic_tac_toe/models_old/User.dart';
-import 'package:tic_tac_toe/models_old/game.dart';
-import 'package:tic_tac_toe/users_board.dart';
+import 'package:tic_tac_toe/screens/game_board/game_board.dart';
+import 'package:tic_tac_toe/screens/game_invite/game_process_page.dart';
+import 'package:tic_tac_toe/screens/high_scores/high_score_board.dart';
+import 'package:tic_tac_toe/models/User.dart';
+import 'package:tic_tac_toe/models/game.dart';
+import 'package:tic_tac_toe/repositories/user_repository.dart';
+import 'package:tic_tac_toe/screens/login/login_screen.dart';
+import 'package:tic_tac_toe/screens/users_board/users_board.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:tic_tac_toe/widgets/slide_button.dart';
 
@@ -35,8 +38,8 @@ class _MenuPageState extends State<MenuPage>
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-     _userBloc = BlocProvider.of<UserBloc>(context);
-    _gameBloc = BlocProvider.of<GameBloc>(context);
+     _userBloc = TTTBlocProvider.of<UserBloc>(context);
+    _gameBloc = TTTBlocProvider.of<GameBloc>(context);
   }
 
   @override
@@ -231,8 +234,11 @@ class _MenuPageState extends State<MenuPage>
                                     fontSize: 18.0, color: Colors.blue),
                               ),
                               onPressed: () {
+                                var userRepo = Provider.of<UserRepository>(context, listen: false);
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (index) => AuthPage(false)));
+                                    builder: (index) => LoginScreen(userRepository: userRepo)
+                                )
+                                );
                               },
                             )
                           ]);
