@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/screens/home/home_screen.dart';
 import 'package:tic_tac_toe/screens/login/login_screen.dart';
@@ -70,11 +71,19 @@ void main() {
   final UserRepository userRepository = UserRepository();
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
-  runApp( BlocProvider(
-    builder: (context) => AuthenticationBloc(userRepository: userRepository)
-      ..dispatch(AppStarted()),
-    child: App(userRepository: userRepository),
-  ),
+
+  runApp(
+      MultiProvider(
+        providers: [
+          Provider<UserRepository>.value(value: userRepository),
+        ],
+        child: BlocProvider(
+          builder: (context) => AuthenticationBloc(userRepository: userRepository)
+            ..dispatch(AppStarted()),
+          child: App(userRepository: userRepository),
+        ),
+      )
+
   );
 }
 

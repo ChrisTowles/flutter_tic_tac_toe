@@ -8,6 +8,7 @@ import 'package:tic_tac_toe/models_old/app_error.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:tic_tac_toe/util/user_util.dart';
 
 class UserService {
   FirebaseAuth _auth;
