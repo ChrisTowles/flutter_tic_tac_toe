@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tic_tac_toe/bloc/authentication_bloc/bloc.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
 import 'package:tic_tac_toe/bloc/user_bloc.dart';
@@ -14,6 +16,8 @@ import 'package:tic_tac_toe/screens/users_board/users_board.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:tic_tac_toe/ui/app_drawer.dart';
 import 'package:tic_tac_toe/widgets/slide_button.dart';
+
+import '../router.dart';
 
 class MenuPage extends StatefulWidget {
   @override
@@ -152,7 +156,9 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
                       return Container();
                     }
                     User currentUser = currentUserSnapshot.data;
-                    return (currentUser != null) ? Text('currentUser - ' + currentUser.name) : Container();
+
+
+                    return (currentUser != null) ? Text('currentUser - ' + currentUser.email) : Container();
                   },
                 ),
                 SizedBox(
@@ -194,13 +200,15 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
                   stream: _userBloc.currentUser,
                   builder: (context, currentUserSnapshot) {
                     if (currentUserSnapshot.hasData && currentUserSnapshot.data != null) {
+                      var authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
                       return FlatButton(
                         child: Text(
                           'Logout',
                           style: TextStyle(fontSize: 18.0, color: Colors.blue),
                         ),
                         onPressed: () {
-                          _userBloc.logoutUser();
+                          authenticationBloc.dispatch(LoggedOut());
+                          Navigator.pushNamedAndRemoveUntil(context, Router.loginScreen, (_) => false);
                         },
                       );
                     } else {

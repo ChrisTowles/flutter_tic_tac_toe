@@ -5,6 +5,7 @@ import 'package:tic_tac_toe/screens/menu/menu_page.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/screens/home/home_screen.dart';
 import 'package:tic_tac_toe/screens/login/login_screen.dart';
+import 'package:tic_tac_toe/screens/router.dart';
 import 'package:tic_tac_toe/screens/splash/splash_screen.dart';
 import 'package:tic_tac_toe/services/game_service.dart';
 import 'package:tic_tac_toe/ui/theme.dart';
@@ -29,6 +30,7 @@ class App extends StatelessWidget {
         '/signup': (context) => SignUpScreen(),
         '/forgot-password': (context) => ForgotPasswordScreen(),
       },*/
+      onGenerateRoute: Router.generateRoute,
       theme: buildTheme(),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
@@ -36,7 +38,8 @@ class App extends StatelessWidget {
             return SplashScreen();
           } else if (state is Authenticated) {
             // return HomeScreen(name: state.displayName);
-            return MenuPage();
+
+            Navigator.of(context).pushNamed(  Router.homeScreen);
           }
           if (state is Unauthenticated) {
             return LoginScreen();
