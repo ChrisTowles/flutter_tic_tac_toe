@@ -3,12 +3,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/bloc/authentication_bloc/bloc.dart';
 
-
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthenticationBloc authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-   //  final HomeBloc homeBloc = BlocProvider.of<HomeBloc>(context);
+    //  final HomeBloc homeBloc = BlocProvider.of<HomeBloc>(context);
 
     return Drawer(
       child: Column(
@@ -49,7 +48,7 @@ class AppDrawer extends StatelessWidget {
                       SchedulerBinding.instance.addPostFrameCallback((_) {
                         // close the app drawer
                         Navigator.of(context).pop();
-                        authenticationBloc.dispatch(          LoggedOut());
+                        authenticationBloc.dispatch(LoggedOut());
                       });
                     },
                   )

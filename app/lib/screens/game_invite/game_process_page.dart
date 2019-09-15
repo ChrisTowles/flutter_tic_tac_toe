@@ -11,21 +11,18 @@ class GameProcessPage extends StatefulWidget {
 }
 
 class _GameProcessPageState extends State<GameProcessPage> {
-
   GameBloc _gameBloc;
 
-   @override
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _gameBloc = TTTBlocProvider.of<GameBloc>(context);
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      body:Padding(
+      body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -34,19 +31,28 @@ class _GameProcessPageState extends State<GameProcessPage> {
             StreamBuilder<String>(
               initialData: '',
               stream: _gameBloc.multiNetworkMessage,
-              builder: (context, messageSnapshot){
-                    return Text(messageSnapshot.data, style: TextStyle(fontSize: 30.0 , fontWeight: FontWeight.bold),);
+              builder: (context, messageSnapshot) {
+                return Text(
+                  messageSnapshot.data,
+                  style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                );
               },
             ),
-            SizedBox(height: 40.0,),
+            SizedBox(
+              height: 40.0,
+            ),
             StreamBuilder<bool>(
               initialData: false,
               stream: _gameBloc.multiNetworkStarted,
-              builder: (context, startedSnapshot){
-
-                        return (startedSnapshot.data)? RaisedButton(child: Text('GO TO GAME'), onPressed: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder:(index)=> GameBoard()));
-                        },) : Container();
+              builder: (context, startedSnapshot) {
+                return (startedSnapshot.data)
+                    ? RaisedButton(
+                        child: Text('GO TO GAME'),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (index) => GameBoard()));
+                        },
+                      )
+                    : Container();
               },
             )
           ],

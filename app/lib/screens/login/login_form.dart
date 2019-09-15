@@ -9,9 +9,7 @@ import 'google_login_button.dart';
 import 'login_button.dart';
 
 class LoginForm extends StatefulWidget {
-
-  LoginForm({Key key})
-      :  super(key: key);
+  LoginForm({Key key}) : super(key: key);
 
   State<LoginForm> createState() => _LoginFormState();
 }
@@ -22,8 +20,7 @@ class _LoginFormState extends State<LoginForm> {
 
   LoginBloc _loginBloc;
 
-  bool get isPopulated =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+  bool get isPopulated => _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   bool isLoginButtonEnabled(LoginState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -115,9 +112,7 @@ class _LoginFormState extends State<LoginForm> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         LoginButton(
-                          onPressed: isLoginButtonEnabled(state)
-                              ? _onFormSubmitted
-                              : null,
+                          onPressed: isLoginButtonEnabled(state) ? _onFormSubmitted : null,
                         ),
                         GoogleLoginButton(),
                         CreateAccountButton(),

@@ -28,8 +28,7 @@ class Submitted extends RegisterEvent {
   final String email;
   final String password;
 
-  Submitted({@required this.email, @required this.password})
-      : super([email, password]);
+  Submitted({@required this.email, @required this.password}) : super([email, password]);
 
   @override
   String toString() {

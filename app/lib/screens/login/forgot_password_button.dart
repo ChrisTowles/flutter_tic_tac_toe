@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/screens/reset_password/reset_password_screen.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
-
-  ForgotPasswordButton({Key key} )
-      :  super(key: key);
+  ForgotPasswordButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

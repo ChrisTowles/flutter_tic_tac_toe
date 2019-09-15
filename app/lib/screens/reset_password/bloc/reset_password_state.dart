@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
 
-
 @immutable
 class ResetPasswordState {
   final bool isEmailValid;

@@ -8,13 +8,7 @@ class User {
   final UserState currentState;
   final String fcmToken;
 
-  User(
-      {this.id,
-      this.name,
-      this.email,
-      this.avatarUrl,
-      this.currentState,
-      this.fcmToken});
+  User({this.id, this.name, this.email, this.avatarUrl, this.currentState, this.fcmToken});
 
   User copyWith({
     String id,
@@ -24,7 +18,6 @@ class User {
     UserState currentState,
     String fcmToken,
   }) {
-
     return User(
       id: id ?? this.id,
       name: name ?? this.name,

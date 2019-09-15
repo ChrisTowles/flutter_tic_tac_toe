@@ -62,16 +62,12 @@ void main() {
         child: MultiBlocProvider(
             providers: [
               BlocProvider<AuthenticationBloc>(
-                  builder: (context) =>
-                      AuthenticationBloc(userRepository: userRepository)
-                        ..dispatch(AppStarted())),
+                  builder: (context) => AuthenticationBloc(userRepository: userRepository)..dispatch(AppStarted())),
             ],
             child: TTTBlocProvider<UserBloc>(
                 bloc: UserBloc(userRepository: userRepository),
                 child: TTTBlocProvider<GameBloc>(
-                  bloc: GameBloc(
-                      gameService: GameService(),
-                      userRepository: userRepository),
+                  bloc: GameBloc(gameService: GameService(), userRepository: userRepository),
                   child: App(),
                 )))),
   );

@@ -15,14 +15,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:tic_tac_toe/ui/app_drawer.dart';
 import 'package:tic_tac_toe/widgets/slide_button.dart';
 
-
 class MenuPage extends StatefulWidget {
   @override
   _MenuPageState createState() => _MenuPageState();
 }
 
-class _MenuPageState extends State<MenuPage>
-    with SingleTickerProviderStateMixin {
+class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin {
   UserBloc _userBloc;
   GameBloc _gameBloc;
   FirebaseMessaging _messaging = new FirebaseMessaging();
@@ -31,12 +29,11 @@ class _MenuPageState extends State<MenuPage>
   Animation<double> _bigLetterScale;
   List<Animation<double>> _menuButtonSlides;
 
-
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-     _userBloc = TTTBlocProvider.of<UserBloc>(context);
+    _userBloc = TTTBlocProvider.of<UserBloc>(context);
     _gameBloc = TTTBlocProvider.of<GameBloc>(context);
   }
 
@@ -44,17 +41,13 @@ class _MenuPageState extends State<MenuPage>
   void initState() {
     super.initState();
 
-    _animationController = new AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1000));
-    _bigLetterScale = Tween<double>(begin: 0.7, end: 1.0).animate(
-        CurvedAnimation(parent: _animationController, curve: Curves.easeInCirc));
+    _animationController = new AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
+    _bigLetterScale = Tween<double>(begin: 0.7, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInCirc));
 
     _menuButtonSlides = [];
     for (int i = 0; i < 4; i++) {
-      _menuButtonSlides.add(Tween<double>(begin: -1.0, end: 0.0).animate(
-          CurvedAnimation(
-              parent: _animationController,
-              curve: Interval(i / 3, 1.0, curve: Curves.easeIn))));
+      _menuButtonSlides.add(Tween<double>(begin: -1.0, end: 0.0)
+          .animate(CurvedAnimation(parent: _animationController, curve: Interval(i / 3, 1.0, curve: Curves.easeIn))));
     }
 
     _animationController.forward();
@@ -67,12 +60,12 @@ class _MenuPageState extends State<MenuPage>
 
       switch (notificationType) {
         case 'challenge':
-         User challenger = User(id: message['data']['senderId'], name:  message['data']['senderName'],  fcmToken: message['data']['senderFcmToken']);
+          User challenger =
+              User(id: message['data']['senderId'], name: message['data']['senderName'], fcmToken: message['data']['senderFcmToken']);
           _showAcceptanceDialog(challenger);
           break;
         case 'started':
-          _gameBloc.startServerGame(
-              message['data']['player1Id'], message['data']['player2Id']);
+          _gameBloc.startServerGame(message['data']['player1Id'], message['data']['player2Id']);
           break;
         case 'replayGame':
           _gameBloc.changeGameOver(false);
@@ -95,13 +88,12 @@ class _MenuPageState extends State<MenuPage>
       String notificationType = message['notificationType'];
       switch (notificationType) {
         case 'challenge':
-          User challenger = User(id: message['senderId'], name:  message['senderName'],  fcmToken:  message['senderFcmToken']);
+          User challenger = User(id: message['senderId'], name: message['senderName'], fcmToken: message['senderFcmToken']);
           _showAcceptanceDialog(challenger);
           break;
         case 'started':
           _gameBloc.startServerGame(message['player1Id'], message['player2Id']);
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => GameProcessPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => GameProcessPage()));
           break;
         case 'gameEnd':
           _gameBloc.clearProcessDetails();
@@ -127,7 +119,7 @@ class _MenuPageState extends State<MenuPage>
           Positioned(
             left: -60.0,
             top: -75.0,
-            child:  _bigLetter('X'),
+            child: _bigLetter('X'),
           ),
           Positioned(
             right: -100.0,
@@ -160,9 +152,7 @@ class _MenuPageState extends State<MenuPage>
                       return Container();
                     }
                     User currentUser = currentUserSnapshot.data;
-                    return (currentUser != null)
-                        ? Text('currentUser - ' + currentUser.name)
-                        : Container();
+                    return (currentUser != null) ? Text('currentUser - ' + currentUser.name) : Container();
                   },
                 ),
                 SizedBox(
@@ -173,8 +163,7 @@ class _MenuPageState extends State<MenuPage>
                   animation: _menuButtonSlides[0],
                   onPressed: () {
                     _gameBloc.startSingleDeviceGame(GameType.computer);
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (index) => GameBoard()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (index) => GameBoard()));
                   },
                 ),
                 SlideButton(
@@ -182,8 +171,7 @@ class _MenuPageState extends State<MenuPage>
                   animation: _menuButtonSlides[1],
                   onPressed: () {
                     _gameBloc.startSingleDeviceGame(GameType.multi_device);
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (index) => GameBoard()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (index) => GameBoard()));
                   },
                 ),
                 SlideButton(
@@ -191,24 +179,21 @@ class _MenuPageState extends State<MenuPage>
                   animation: _menuButtonSlides[2],
                   onPressed: () {
                     _userBloc.getUsers();
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (index) => UsersBoard()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (index) => UsersBoard()));
                   },
                 ),
                 SlideButton(
                   text: 'HIGH SCORE',
                   animation: _menuButtonSlides[3],
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (index) => HighScoreBoard()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (index) => HighScoreBoard()));
                   },
                 ),
                 StreamBuilder(
                   initialData: null,
                   stream: _userBloc.currentUser,
                   builder: (context, currentUserSnapshot) {
-                    if (currentUserSnapshot.hasData &&
-                        currentUserSnapshot.data != null) {
+                    if (currentUserSnapshot.hasData && currentUserSnapshot.data != null) {
                       return FlatButton(
                         child: Text(
                           'Logout',
@@ -219,27 +204,21 @@ class _MenuPageState extends State<MenuPage>
                         },
                       );
                     } else {
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Play with Others?',
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                            FlatButton(
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.blue),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (index) => LoginScreen()
-                                )
-                                );
-                              },
-                            )
-                          ]);
+                      return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                        Text(
+                          'Play with Others?',
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                        FlatButton(
+                          child: Text(
+                            'Sign In',
+                            style: TextStyle(fontSize: 18.0, color: Colors.blue),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (index) => LoginScreen()));
+                          },
+                        )
+                      ]);
                     }
                   },
                 ),
@@ -257,20 +236,19 @@ class _MenuPageState extends State<MenuPage>
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-              title: Text('Game Ended!'),
-              content: Text(message['notification']['body']), // get from server
+          title: Text('Game Ended!'),
+          content: Text(message['notification']['body']), // get from server
 
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => MenuPage()));
-                  },
-                ),
-              ],
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () async {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MenuPage()));
+              },
             ),
+          ],
+        ),
       );
     });
   }
@@ -281,64 +259,53 @@ class _MenuPageState extends State<MenuPage>
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-              title: Text('Game Rejected!'),
-              content: Text(message['notification']['body']), // get from server
+          title: Text('Game Rejected!'),
+          content: Text(message['notification']['body']), // get from server
 
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => MenuPage()));
-                  },
-                ),
-              ],
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () async {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MenuPage()));
+              },
             ),
+          ],
+        ),
       );
     });
   }
 
   _showAcceptanceDialog(User challenger) async {
-
     Future.delayed(Duration.zero, () {
       showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) => StreamBuilder<User>(
           stream: _userBloc.currentUser,
-          builder: (context, currentUserSnapshot){
-
+          builder: (context, currentUserSnapshot) {
             return AlertDialog(
               title: Text('Tic Tac Toe Challeenge'),
-              content: Text(challenger.name +
-                  ' has Challenged you to a game of tic tac toe'),
+              content: Text(challenger.name + ' has Challenged you to a game of tic tac toe'),
               actions: <Widget>[
                 FlatButton(
                   child: Text('ACCEPT'),
                   onPressed: () async {
-                    _gameBloc.handleChallenge(
-                        challenger,
-                        ChallengeHandleType.accept);
+                    _gameBloc.handleChallenge(challenger, ChallengeHandleType.accept);
                     Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GameProcessPage()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => GameProcessPage()));
                   },
                 ),
                 FlatButton(
                   child: Text('DECLINE'),
                   onPressed: () {
-                    _gameBloc.handleChallenge(
-                       challenger,
-                        ChallengeHandleType.reject);
+                    _gameBloc.handleChallenge(challenger, ChallengeHandleType.reject);
                     Navigator.pop(context);
                   },
                 )
               ],
             );
           },
-
-
         ),
       );
     });

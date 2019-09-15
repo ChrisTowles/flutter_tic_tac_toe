@@ -1,12 +1,10 @@
 import 'package:tic_tac_toe/models/User.dart';
 
-class ScoreDetail{
+class ScoreDetail {
+  final User user;
+  final int wins;
+  final int losses;
+  final bool wonLast;
 
-
-    final User user;
-    final int wins;
-    final int losses;
-    final bool wonLast;
-
-    ScoreDetail({this.user, this.wins, this.losses, this.wonLast});
+  ScoreDetail({this.user, this.wins, this.losses, this.wonLast});
 }

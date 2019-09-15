@@ -5,22 +5,15 @@ import 'package:tic_tac_toe/models/User.dart';
 class FirestoreRepository {
   final Firestore _firestore;
 
-  FirestoreRepository({Firestore firestore})
-      : _firestore = firestore ?? Firestore.instance;
+  FirestoreRepository({Firestore firestore}) : _firestore = firestore ?? Firestore.instance;
 
   Future<void> addUserSettingsDB(AuthResult authResult) async {
-
-    User user = new User(
-      id: authResult.user.uid,
-      email: authResult.user.email,
-      name: authResult.user.displayName
-    );
+    User user = new User(id: authResult.user.uid, email: authResult.user.email, name: authResult.user.displayName);
 
     var value = await checkUserExist(user.id);
     if (!value) {
       print("user ${user.name} ${user.email} added");
       //_firestore.document("users/${user.id}").setData(user.toJson());
-
 
     } else {
       // print("user ${user.firstName} ${user.email} exists");

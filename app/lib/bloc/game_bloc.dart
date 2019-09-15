@@ -42,23 +42,17 @@ class GameBloc extends BlocBase {
   final _startServerGame = BehaviorSubject<Map<String, String>>();
 
   //sink
-  Function(int, bool) get playPiece => (position, isAuto) => _playPiece.sink.add({'position':position, 'isAuto': isAuto});
+  Function(int, bool) get playPiece => (position, isAuto) => _playPiece.sink.add({'position': position, 'isAuto': isAuto});
   Function() get cancelGame => () => _cancelGameSubject.sink.add(null);
-  Function() get replayCurrentGame =>
-      () => _replayCurrentGameSubject.sink.add(null);
-  Function(User, ChallengeHandleType) get handleChallenge =>
-      (receiver, challengeHandleType) => _handleChallengeSubject.sink.add(
-          {'receiver': receiver, 'challengeHandleType': challengeHandleType});
+  Function() get replayCurrentGame => () => _replayCurrentGameSubject.sink.add(null);
+  Function(User, ChallengeHandleType) get handleChallenge => (receiver, challengeHandleType) =>
+      _handleChallengeSubject.sink.add({'receiver': receiver, 'challengeHandleType': challengeHandleType});
 
-  Function(GameType) get startSingleDeviceGame =>
-      (gameType) => _startSingleDeviceGame.sink.add(gameType);
-  Function() get clearProcessDetails =>
-      () => _clearProcessDetails.sink.add(null);
+  Function(GameType) get startSingleDeviceGame => (gameType) => _startSingleDeviceGame.sink.add(gameType);
+  Function() get clearProcessDetails => () => _clearProcessDetails.sink.add(null);
   Function(String, String) get startServerGame =>
-      (player1Id, player2Id) => _startServerGame.sink
-          .add({'player1Id': player1Id, 'player2Id': player2Id});
-  Function(bool) get changeGameOver =>
-      (allowReplay) => _gameOverSubject.sink.add(allowReplay);
+      (player1Id, player2Id) => _startServerGame.sink.add({'player1Id': player1Id, 'player2Id': player2Id});
+  Function(bool) get changeGameOver => (allowReplay) => _gameOverSubject.sink.add(allowReplay);
 
   //stream
   Stream<List<GamePiece>> get currentBoard => _currentBoardSubject.stream;
@@ -71,11 +65,12 @@ class GameBloc extends BlocBase {
   Stream<bool> get gameOver => _gameOverSubject.stream;
 
   GameBloc({
-    @required  GameService gameService,
+    @required GameService gameService,
     @required UserRepository userRepository,
-  })  : assert(userRepository != null), _userRepository = userRepository,
-        assert(gameService != null), _gameService = gameService {
-
+  })  : assert(userRepository != null),
+        _userRepository = userRepository,
+        assert(gameService != null),
+        _gameService = gameService {
     _handleChallengeSubject.stream.listen(_handleChallenge);
 
     _gameOverSubject.stream.listen((gameOver) {
@@ -84,16 +79,14 @@ class GameBloc extends BlocBase {
 
     _startSingleDeviceGame.stream.listen(_handleStartSingleDeviceGame);
 
-    _playPiece.withLatestFrom(_currentPlayerSubject,
-        (Map<String, dynamic> playDetails, Player currentPlayer) {
-     // return {'position': position, 'currentPlayer':currentPlayer};
-      return {}..addAll(playDetails)..addAll({'currentPlayer':currentPlayer});
+    _playPiece.withLatestFrom(_currentPlayerSubject, (Map<String, dynamic> playDetails, Player currentPlayer) {
+      // return {'position': position, 'currentPlayer':currentPlayer};
+      return {}..addAll(playDetails)..addAll({'currentPlayer': currentPlayer});
     }).listen(_handlePlayPiece);
 
     _cancelGameSubject.listen(_handleCancelGame);
 
-    _replayCurrentGameSubject.withLatestFrom(_currentPlayerSubject,
-        (_, Player currentPlayer) {
+    _replayCurrentGameSubject.withLatestFrom(_currentPlayerSubject, (_, Player currentPlayer) {
       return currentPlayer;
     }).listen(_handleReplayCurrentGame);
 
@@ -146,7 +139,6 @@ class GameBloc extends BlocBase {
   }
 
   _handlePlayPiece(details) async {
-
     List<Player> players = await _getPlayers();
     Player player1 = players[0];
     Player player2 = players[1];
@@ -161,60 +153,47 @@ class GameBloc extends BlocBase {
         if (currentPlayer.user.id == currentUser.id) {
           //change turn
           _changePlayerTurn(true);
-          _currentBoardC[position] =
-              currentPlayer.gamePiece.copyWith(pieceType: PieceType.temp);
-          _currentBoardSubject.sink.add(
-              _currentBoardC); // fill the space once user clicks before the network updates its own
+          _currentBoardC[position] = currentPlayer.gamePiece.copyWith(pieceType: PieceType.temp);
+          _currentBoardSubject.sink.add(_currentBoardC); // fill the space once user clicks before the network updates its own
 
           String networkGameId = player1.user.id + '_' + player2.user.id;
 
-          _gameService
-              .playPiece(networkGameId, currentUser.id, position)
-              .catchError((err) {
+          _gameService.playPiece(networkGameId, currentUser.id, position).catchError((err) {
             _changePlayerTurn(false);
-            _currentBoardC[position] =
-                GamePiece(piece: '', pieceType: PieceType.normal);
+            _currentBoardC[position] = GamePiece(piece: '', pieceType: PieceType.normal);
             _currentBoardSubject.sink.add(_currentBoardC);
           });
         }
       } else {
-        if(_gameType == GameType.multi_device || isAuto || (currentPlayer.user.id == 'User')){
-        _currentBoardC[position] = currentPlayer.gamePiece;
-        final List<int> winLine =
-            _getWinLine(_currentBoardC, currentPlayer.gamePiece.piece);
-        if (winLine.isNotEmpty) {
-          _markWinLineOnBoard(winLine);
+        if (_gameType == GameType.multi_device || isAuto || (currentPlayer.user.id == 'User')) {
+          _currentBoardC[position] = currentPlayer.gamePiece;
+          final List<int> winLine = _getWinLine(_currentBoardC, currentPlayer.gamePiece.piece);
+          if (winLine.isNotEmpty) {
+            _markWinLineOnBoard(winLine);
 
-          _gameMessageSubject.sink.add(currentPlayer.user.name + ' wins!!!');
+            _gameMessageSubject.sink.add(currentPlayer.user.name + ' wins!!!');
 
-          if (currentPlayer.user.id == player1.user.id) {
-            player1 = player1.copyWith(
-                score: player1.score + 1,
-                gamePiece:
-                    player1.gamePiece.copyWith(pieceType: PieceType.normal));
-            _player1Subject.sink.add(player1);
+            if (currentPlayer.user.id == player1.user.id) {
+              player1 = player1.copyWith(score: player1.score + 1, gamePiece: player1.gamePiece.copyWith(pieceType: PieceType.normal));
+              _player1Subject.sink.add(player1);
+            } else {
+              player2 = player2.copyWith(score: player2.score + 1, gamePiece: player2.gamePiece.copyWith(pieceType: PieceType.normal));
+              _player2Subject.sink.add(player2);
+            }
+            _gameOverSubject.sink.add(true);
+          } else if (_isTie(_currentBoardC)) {
+            _gameMessageSubject.sink.add("It's a tie !!!");
+            _gameOverSubject.sink.add(true);
           } else {
-            player2 = player2.copyWith(
-                score: player2.score + 1,
-                gamePiece:
-                    player2.gamePiece.copyWith(pieceType: PieceType.normal));
-            _player2Subject.sink.add(player2);
+            //change turn
+            _changePlayerTurn(false);
+            //if the last player is a user, then computer can play own piece
+            if (_gameType == GameType.computer && currentPlayer.user.name == 'User') {
+              _playComputerPiece();
+            }
           }
-          _gameOverSubject.sink.add(true);
-        } else if (_isTie(_currentBoardC)) {
-          _gameMessageSubject.sink.add("It's a tie !!!");
-          _gameOverSubject.sink.add(true);
-        } else {
-          //change turn
-          _changePlayerTurn(false);
-          //if the last player is a user, then computer can play own piece
-          if (_gameType == GameType.computer &&
-              currentPlayer.user.name == 'User') {
-            _playComputerPiece();
-          }
+          _currentBoardSubject.sink.add(_currentBoardC);
         }
-        _currentBoardSubject.sink.add(_currentBoardC);
-      }
       }
     }
   }
@@ -226,7 +205,7 @@ class GameBloc extends BlocBase {
       String gameId = players[0].user.id + '_' + players[1].user.id;
       User currentUser = await _userRepository.getCurrentUser();
       try {
-        _gameService.cancelGame(gameId, currentUser.id,  players[0].user.fcmToken, players[1].user.fcmToken);
+        _gameService.cancelGame(gameId, currentUser.id, players[0].user.fcmToken, players[1].user.fcmToken);
         _serverGameSub.cancel();
       } catch (err) {
         print(err);
@@ -250,8 +229,7 @@ class GameBloc extends BlocBase {
     } else {
       _emptyGameBoard();
       _gameOverSubject.sink.add(false);
-      if (_gameType == GameType.computer &&
-          currentPlayer.user.name == 'Computer') {
+      if (_gameType == GameType.computer && currentPlayer.user.name == 'Computer') {
         _playComputerPiece();
       }
       _gameMessageSubject.sink.add(currentPlayer.user.name + "'s turn");
@@ -267,11 +245,7 @@ class GameBloc extends BlocBase {
 
     String gameId = player1Id + '_' + player2Id;
 
-    _serverGameSub = Firestore.instance
-        .collection('games')
-        .document(gameId)
-        .snapshots()
-        .listen((snapshot) async {
+    _serverGameSub = Firestore.instance.collection('games').document(gameId).snapshots().listen((snapshot) async {
       Map<String, dynamic> gameData = snapshot.data;
 
       _setNetworkPlayer(gameData['player1'], _player1Subject);
@@ -280,8 +254,7 @@ class GameBloc extends BlocBase {
 
       if (gameData['winner'].isNotEmpty && gameData['winner'] != 'tie') {
         Player gameWinner = await _getPlayerFromId(gameData['winner']);
-        List<int> winLine =
-            _getWinLine(_currentBoardC, gameWinner.gamePiece.piece);
+        List<int> winLine = _getWinLine(_currentBoardC, gameWinner.gamePiece.piece);
         _markWinLineOnBoard(winLine);
         _currentBoardSubject.sink.add(_currentBoardC);
         _gameMessageSubject.sink.add(gameWinner.user.name + ' wins!!!');
@@ -294,12 +267,11 @@ class GameBloc extends BlocBase {
         _changePlayerTurn(false, idToUse: gameData['currentPlayer']);
       }
     })
-          ..onError((error) {
-            print(error);
-          });
+      ..onError((error) {
+        print(error);
+      });
 
-    _multiNetworkMessage.sink
-        .add('Game has been Started! Click button to play');
+    _multiNetworkMessage.sink.add('Game has been Started! Click button to play');
     _multiNetworkStarted.sink.add(true);
   }
 
@@ -312,24 +284,19 @@ class GameBloc extends BlocBase {
     Future.delayed(Duration(seconds: 1), () async {
       int bestPostion = await _getComputerPlayPosition();
       playPiece(bestPostion, true);
-     // _playPiece.sink.add({'position': bestPostion , 'isAuto': true});
-      
+      // _playPiece.sink.add({'position': bestPostion , 'isAuto': true});
     });
   }
 
   _emptyGameBoard() {
-    _currentBoardC = List.generate(
-        9, (index) => GamePiece(piece: '', pieceType: PieceType.normal));
+    _currentBoardC = List.generate(9, (index) => GamePiece(piece: '', pieceType: PieceType.normal));
     _currentBoardSubject.sink.add(_currentBoardC);
   }
 
   _markWinLineOnBoard(List<int> winLine) {
-    _currentBoardC[winLine[0]] =
-        _currentBoardC[winLine[0]].copyWith(pieceType: PieceType.win);
-    _currentBoardC[winLine[1]] =
-        _currentBoardC[winLine[1]].copyWith(pieceType: PieceType.win);
-    _currentBoardC[winLine[2]] =
-        _currentBoardC[winLine[2]].copyWith(pieceType: PieceType.win);
+    _currentBoardC[winLine[0]] = _currentBoardC[winLine[0]].copyWith(pieceType: PieceType.win);
+    _currentBoardC[winLine[1]] = _currentBoardC[winLine[1]].copyWith(pieceType: PieceType.win);
+    _currentBoardC[winLine[2]] = _currentBoardC[winLine[2]].copyWith(pieceType: PieceType.win);
   }
 
   bool _isTie(List<GamePiece> gameBoard) {
@@ -365,14 +332,8 @@ class GameBloc extends BlocBase {
   }
 
   _changePlayerTurn(bool temp, {idToUse}) {
-    Observable.combineLatest3(
-        _currentPlayerSubject, _player1Subject, _player2Subject,
-        (currentPlayer, player1, player2) {
-      return {
-        'currentPlayer': currentPlayer,
-        'player1': player1,
-        'player2': player2
-      };
+    Observable.combineLatest3(_currentPlayerSubject, _player1Subject, _player2Subject, (currentPlayer, player1, player2) {
+      return {'currentPlayer': currentPlayer, 'player1': player1, 'player2': player2};
     }).first.then((details) {
       Player currentPlayer = details['currentPlayer'];
       Player player1 = details['player1'];
@@ -382,29 +343,22 @@ class GameBloc extends BlocBase {
 
       Player currentSetPlayer;
       if (idToUse != null) {
-        Player playerWithId = [player1, player2]
-            .firstWhere((player) => player.user.id == idToUse);
+        Player playerWithId = [player1, player2].firstWhere((player) => player.user.id == idToUse);
         currentSetPlayer = playerWithId;
       } else {
-        Player swappedCurrentPlayer = [player1, player2]
-            .firstWhere((player) => player.user.id != currentPlayer.user.id);
+        Player swappedCurrentPlayer = [player1, player2].firstWhere((player) => player.user.id != currentPlayer.user.id);
         currentSetPlayer = swappedCurrentPlayer;
       }
       _currentPlayerSubject.sink.add(currentSetPlayer);
-      _gameMessageSubject.sink
-          .add(currentSetPlayer.user.name + "'s turn" + tempString);
+      _gameMessageSubject.sink.add(currentSetPlayer.user.name + "'s turn" + tempString);
     });
   }
 
   _setNetworkPlayer(Map player, playerSubject) {
     Player gottenPlayer = Player(
-        gamePiece:
-            GamePiece(piece: player['gamePiece'], pieceType: PieceType.normal),
+        gamePiece: GamePiece(piece: player['gamePiece'], pieceType: PieceType.normal),
         score: player['score'],
-        user: User(
-            id: player['user']['id'],
-            name: player['user']['name'],
-            fcmToken: player['user']['fcmToken']));
+        user: User(id: player['user']['id'], name: player['user']['name'], fcmToken: player['user']['fcmToken']));
 
     playerSubject.sink.add(gottenPlayer);
   }
@@ -415,8 +369,7 @@ class GameBloc extends BlocBase {
   }
 
   Future<List<Player>> _getPlayers() async {
-    return await Observable.combineLatest2(_player1Subject, _player2Subject,
-        (Player player1, Player player2) {
+    return await Observable.combineLatest2(_player1Subject, _player2Subject, (Player player1, Player player2) {
       return <Player>[player1, player2];
     }).first;
   }
@@ -426,10 +379,7 @@ class GameBloc extends BlocBase {
     final sortedMap = SplayTreeMap<dynamic, dynamic>();
     sortedMap.addAll(networkPieces);
 
-    List<GamePiece> pieces = sortedMap.values
-        .toList()
-        .map((piece) => GamePiece(piece: piece, pieceType: PieceType.normal))
-        .toList();
+    List<GamePiece> pieces = sortedMap.values.toList().map((piece) => GamePiece(piece: piece, pieceType: PieceType.normal)).toList();
     _currentBoardC = pieces;
     _currentBoardSubject.sink.add(_currentBoardC);
   }
@@ -467,13 +417,11 @@ class GameBloc extends BlocBase {
 
     List<GamePiece> testBoard = []..addAll(_currentBoardC);
     for (int i = 0; i < emptyPos.length; i++) {
-      testBoard[emptyPos[i]] =
-          GamePiece(piece: piece, pieceType: PieceType.normal);
+      testBoard[emptyPos[i]] = GamePiece(piece: piece, pieceType: PieceType.normal);
       if (_getWinLine(testBoard, piece).isNotEmpty) {
         return emptyPos[i];
       } else {
-        testBoard[emptyPos[i]] =
-            GamePiece(piece: '', pieceType: PieceType.normal);
+        testBoard[emptyPos[i]] = GamePiece(piece: '', pieceType: PieceType.normal);
       }
     }
     return null;

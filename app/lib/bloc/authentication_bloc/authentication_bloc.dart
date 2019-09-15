@@ -4,11 +4,8 @@ import 'package:tic_tac_toe/repositories/user_repository.dart';
 import './bloc.dart';
 import 'package:meta/meta.dart';
 
-
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-
   final UserRepository _userRepository;
-
 
   AuthenticationBloc({@required UserRepository userRepository})
       : assert(userRepository != null),
@@ -19,8 +16,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   @override
   Stream<AuthenticationState> mapEventToState(
-      AuthenticationEvent event,
-      ) async* {
+    AuthenticationEvent event,
+  ) async* {
     if (event is AppStarted) {
       yield* _mapAppStartedToState();
     } else if (event is LoggedIn) {
@@ -36,9 +33,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       if (isSignedIn) {
         final name = await _userRepository.getUserEmail();
         yield Authenticated(name);
-
-
-
       } else {
         yield Unauthenticated();
       }
@@ -55,5 +49,4 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     yield Unauthenticated();
     _userRepository.signOut();
   }
-
 }

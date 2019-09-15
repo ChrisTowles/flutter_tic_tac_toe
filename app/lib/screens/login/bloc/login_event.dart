@@ -6,7 +6,6 @@ abstract class LoginEvent extends Equatable {
   LoginEvent([List props = const <dynamic>[]]) : super(props);
 }
 
-
 class EmailChanged extends LoginEvent {
   final String email;
 
@@ -29,8 +28,7 @@ class Submitted extends LoginEvent {
   final String email;
   final String password;
 
-  Submitted({@required this.email, @required this.password})
-      : super([email, password]);
+  Submitted({@required this.email, @required this.password}) : super([email, password]);
 
   @override
   String toString() {
@@ -47,8 +45,7 @@ class LoginWithCredentialsPressed extends LoginEvent {
   final String email;
   final String password;
 
-  LoginWithCredentialsPressed({@required this.email, @required this.password})
-      : super([email, password]);
+  LoginWithCredentialsPressed({@required this.email, @required this.password}) : super([email, password]);
 
   @override
   String toString() {

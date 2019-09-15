@@ -18,9 +18,9 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
 
   @override
   Stream<ResetPasswordState> transformEvents(
-      Stream<ResetPasswordEvent> events,
-      Stream<ResetPasswordState> Function(ResetPasswordEvent event) next,
-      ) {
+    Stream<ResetPasswordEvent> events,
+    Stream<ResetPasswordState> Function(ResetPasswordEvent event) next,
+  ) {
     final observableStream = events as Observable<ResetPasswordEvent>;
     final nonDebounceStream = observableStream.where((event) {
       return (event is! EmailChanged);
@@ -33,8 +33,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
 
   @override
   Stream<ResetPasswordState> mapEventToState(
-      ResetPasswordEvent event,
-      ) async* {
+    ResetPasswordEvent event,
+  ) async* {
     if (event is EmailChanged) {
       yield* _mapEmailChangedToState(event.email);
     } else if (event is Submitted) {
@@ -49,9 +49,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   }
 
   Stream<ResetPasswordState> _mapFormSubmittedToState(
-      String email,
-
-      ) async* {
+    String email,
+  ) async* {
     yield ResetPasswordState.loading();
     try {
       await _userRepository.forgotPasswordEmail(email);

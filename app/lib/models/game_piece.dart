@@ -1,18 +1,12 @@
-enum PieceType{win, normal, temp}
+enum PieceType { win, normal, temp }
 
+class GamePiece {
+  final String piece;
+  final PieceType pieceType;
 
-class GamePiece{
+  GamePiece({this.piece, this.pieceType});
 
-   final String piece;
-   final PieceType pieceType;
-
-    GamePiece({this.piece, this.pieceType});
-
-    GamePiece copyWith({String piece, PieceType pieceType}){
-
-      return GamePiece(
-        piece:  piece ?? this.piece,
-        pieceType: pieceType ?? this.pieceType
-      );
-    }  
+  GamePiece copyWith({String piece, PieceType pieceType}) {
+    return GamePiece(piece: piece ?? this.piece, pieceType: pieceType ?? this.pieceType);
+  }
 }

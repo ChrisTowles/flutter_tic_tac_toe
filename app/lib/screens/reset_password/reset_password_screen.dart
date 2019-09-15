@@ -6,13 +6,10 @@ import 'package:tic_tac_toe/screens/reset_password/reset_password_form.dart';
 import 'bloc/bloc.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-
-  ResetPasswordScreen({Key key})
-      :        super(key: key);
+  ResetPasswordScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     var userRepository = Provider.of<UserRepository>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Reset Password')),

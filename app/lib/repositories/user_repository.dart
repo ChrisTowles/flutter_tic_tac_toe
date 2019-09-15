@@ -13,38 +13,31 @@ class UserRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn();
 
-
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-
-
-
-   var userCred = await _firebaseAuth.signInWithCredential(credential);
+    var userCred = await _firebaseAuth.signInWithCredential(credential);
 
     await _processAuthUser(userCred.user);
-
 
     return _firebaseAuth.currentUser();
   }
 
   Future<void> signInWithCredentials(String email, String password) async {
-    var authResult =  await _firebaseAuth.signInWithEmailAndPassword(
+    var authResult = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
     await _processAuthUser(authResult.user);
-
   }
 
   Future<AuthResult> signUp({String email, String password}) async {
-    return  await _firebaseAuth.createUserWithEmailAndPassword(
+    return await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -62,7 +55,6 @@ class UserRepository {
     return currentUser != null;
   }
 
-
   Future<String> getUserEmail() async {
     return (await _firebaseAuth.currentUser()).email;
   }
@@ -71,13 +63,8 @@ class UserRepository {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-
   Future<User> _processAuthUser(FirebaseUser authUser) async {
-    User loggedInUser = User(
-        id: authUser.uid,
-        email: authUser.email,
-        name: authUser.displayName,
-        avatarUrl: authUser.photoUrl);
+    User loggedInUser = User(id: authUser.uid, email: authUser.email, name: authUser.displayName, avatarUrl: authUser.photoUrl);
 
     String fcmToken = await _getTokenFromPreference();
     loggedInUser = loggedInUser.copyWith(fcmToken: fcmToken);
@@ -85,17 +72,13 @@ class UserRepository {
     return loggedInUser;
   }
 
-
   saveUserFcmTokenToPreference(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('fcm_token', token);
   }
 
   addUserTokenToStore(String userId, String fcmToken) async {
-    await Firestore.instance
-        .collection('users')
-        .document(userId)
-        .setData({'fcmToken': fcmToken}, merge: true);
+    await Firestore.instance.collection('users').document(userId).setData({'fcmToken': fcmToken}, merge: true);
   }
 
   Future<String> _getTokenFromPreference() async {
@@ -113,19 +96,13 @@ class UserRepository {
     });
   }
 
-
-
   Future<User> getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('fcm_token');
     FirebaseUser currentUser = await _firebaseAuth.currentUser();
     if (currentUser != null) {
       return User(
-          id: currentUser.uid,
-          name: currentUser.displayName,
-          avatarUrl: currentUser.photoUrl,
-          email: currentUser.email,
-          fcmToken: token);
+          id: currentUser.uid, name: currentUser.displayName, avatarUrl: currentUser.photoUrl, email: currentUser.email, fcmToken: token);
     }
     return null;
   }
@@ -154,6 +131,5 @@ class UserRepository {
       });
     });
   }*/
-
 
 }

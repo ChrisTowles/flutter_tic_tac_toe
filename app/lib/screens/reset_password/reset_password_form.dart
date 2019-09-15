@@ -11,11 +11,9 @@ class ResetPasswordForm extends StatefulWidget {
 class _RegisterFormState extends State<ResetPasswordForm> {
   final TextEditingController _emailController = TextEditingController();
 
-
   ResetPasswordBloc _resetPasswordBloc;
 
-  bool get isPopulated =>
-      _emailController.text.isNotEmpty;
+  bool get isPopulated => _emailController.text.isNotEmpty;
 
   bool isRegisterButtonEnabled(ResetPasswordState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -48,7 +46,6 @@ class _RegisterFormState extends State<ResetPasswordForm> {
             );
         }
         if (state.isSuccess) {
-
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -98,14 +95,10 @@ class _RegisterFormState extends State<ResetPasswordForm> {
                       return !state.isEmailValid ? 'Invalid Email' : null;
                     },
                   ),
-
                   Padding(
-
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: ResetPasswordButton(
-                      onPressed: isRegisterButtonEnabled(state)
-                          ? _onFormSubmitted
-                          : null,
+                      onPressed: isRegisterButtonEnabled(state) ? _onFormSubmitted : null,
                     ),
                   ),
                 ],

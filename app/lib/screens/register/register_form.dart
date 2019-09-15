@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/bloc/authentication_bloc/bloc.dart';
 import 'package:tic_tac_toe/screens/register/register_button.dart';
 
-
 import 'bloc/bloc.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -16,8 +15,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   RegisterBloc _registerBloc;
 
-  bool get isPopulated =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+  bool get isPopulated => _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   bool isRegisterButtonEnabled(RegisterState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -106,9 +104,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: RegisterButton(
-                      onPressed: isRegisterButtonEnabled(state)
-                          ? _onFormSubmitted
-                          : null,
+                      onPressed: isRegisterButtonEnabled(state) ? _onFormSubmitted : null,
                     ),
                   ),
                 ],

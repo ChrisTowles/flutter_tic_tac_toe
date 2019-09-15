@@ -1,4 +1,1 @@
-enum SocialLoginType{
-  facebook,
-  google
-}
+enum SocialLoginType { facebook, google }
