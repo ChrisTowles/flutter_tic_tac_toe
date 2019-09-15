@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/screens/register/register_screen.dart';
 
 class CreateAccountButton extends StatelessWidget {

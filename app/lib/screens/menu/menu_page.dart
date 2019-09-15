@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
 import 'package:tic_tac_toe/bloc/user_bloc.dart';
@@ -13,6 +12,7 @@ import 'package:tic_tac_toe/models/game.dart';
 import 'package:tic_tac_toe/screens/login/login_screen.dart';
 import 'package:tic_tac_toe/screens/users_board/users_board.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:tic_tac_toe/ui/app_drawer.dart';
 import 'package:tic_tac_toe/widgets/slide_button.dart';
 
 
@@ -120,6 +120,7 @@ class _MenuPageState extends State<MenuPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0XFF212845),
+      drawer: AppDrawer(),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[

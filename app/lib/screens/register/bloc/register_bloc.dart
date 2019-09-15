@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tic_tac_toe/repositories/firestore_repository.dart';
 import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/util/validator.dart';
 import './bloc.dart';
@@ -10,13 +8,10 @@ import 'package:rxdart/rxdart.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final UserRepository _userRepository;
-  final FirestoreRepository _firestoreRepository;
 
-  RegisterBloc({@required UserRepository userRepository,
-    @required FirestoreRepository firestoreRepository})
+  RegisterBloc({@required UserRepository userRepository})
       : assert(userRepository != null),
-        _userRepository = userRepository,
-        _firestoreRepository = firestoreRepository;
+        _userRepository = userRepository;
 
   @override
   RegisterState get initialState => RegisterState.empty();
@@ -67,7 +62,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       ) async* {
     yield RegisterState.loading();
     try {
-      AuthResult authResult = await _userRepository.signUp(
+      await _userRepository.signUp(
         email: email,
         password: password,
       );

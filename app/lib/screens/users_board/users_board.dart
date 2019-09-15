@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/bloc/bloc_provider.dart';
 import 'package:tic_tac_toe/bloc/game_bloc.dart';
 import 'package:tic_tac_toe/bloc/user_bloc.dart';
 import 'package:tic_tac_toe/screens/game_invite/game_process_page.dart';
 import 'package:tic_tac_toe/models/User.dart';
 import 'package:tic_tac_toe/models/game.dart';
-import 'package:tic_tac_toe/repositories/user_repository.dart';
 import 'package:tic_tac_toe/screens/login/login_screen.dart';
 import 'package:tic_tac_toe/util/user_util.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
